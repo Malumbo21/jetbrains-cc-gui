@@ -217,5 +217,11 @@
             <keyboard-shortcut keymap="Mac OS X" first-keystroke="shift ENTER"/>
             <keyboard-shortcut keymap="macOS" first-keystroke="shift ENTER"/>
         </action>
+
+        <!-- Hide CC GUI Panel (handled via CefKeyboardHandler at JCEF level to avoid conflict with built-in HideActiveWindow) -->
+        <action id="ClaudeCodeGUI.HidePanelAction"
+                class="com.github.claudecodegui.action.HidePanelAction"
+                text="Hide CC GUI Panel"
+                description="Hide the CC GUI tool window panel"/>
     </actions>
 </idea-plugin>
