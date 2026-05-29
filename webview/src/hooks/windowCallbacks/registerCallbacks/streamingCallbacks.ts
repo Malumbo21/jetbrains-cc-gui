@@ -194,8 +194,9 @@ export function registerStreamingCallbacks(options: UseWindowCallbacksOptions): 
     }, STREAM_STALL_CHECK_INTERVAL_MS);
   };
 
-  window.onStreamStart = () => {
+  window.onStreamStart = (mode?: string | boolean) => {
     if (window.__sessionTransitioning) return;
+    const isReplayStart = mode === 'replay' || mode === true;
     // Clear any stale pending updateMessages from previous turn.
     // This prevents onStreamEnd from using outdated snapshot data.
     if (typeof window.__cancelPendingUpdateMessages === 'function') {
@@ -225,7 +226,7 @@ export function registerStreamingCallbacks(options: UseWindowCallbacksOptions): 
     streamingTurnIdRef.current = turnIdCounterRef.current;
     setMessages((prev) => {
       const last = prev[prev.length - 1];
-      if (last?.type === 'assistant') {
+      if (isReplayStart && last?.type === 'assistant') {
         streamingMessageIndexRef.current = prev.length - 1;
         const updated = [...prev];
         updated[prev.length - 1] = {

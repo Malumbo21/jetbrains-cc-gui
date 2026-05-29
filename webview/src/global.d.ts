@@ -595,7 +595,7 @@ interface Window {
   /**
    * Stream start callback - called when streaming begins
    */
-  onStreamStart?: () => void;
+  onStreamStart?: (mode?: string | boolean) => void;
 
   /**
    * Content delta callback - called when a content delta is received

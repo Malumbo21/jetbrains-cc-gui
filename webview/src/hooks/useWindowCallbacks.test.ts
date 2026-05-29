@@ -728,7 +728,7 @@ describe('useWindowCallbacks integration', () => {
     renderHook(() => useWindowCallbacks(opts));
 
     act(() => {
-      window.onStreamStart?.();
+      window.onStreamStart?.('replay');
     });
 
     expect(opts.setMessages).toHaveBeenCalledTimes(1);
@@ -744,6 +744,42 @@ describe('useWindowCallbacks integration', () => {
     expect(nextMessages[1]).toMatchObject({
       type: 'assistant',
       content: 'partial answer',
+      isStreaming: true,
+      __turnId: 1,
+    });
+  });
+
+  it('starts a fresh assistant message for a new turn instead of reusing the previous completed assistant', () => {
+    const opts = createOptions();
+    renderHook(() => useWindowCallbacks(opts));
+
+    act(() => {
+      window.onStreamStart?.();
+    });
+
+    expect(opts.setMessages).toHaveBeenCalledTimes(1);
+    const updater = (opts.setMessages as any).mock.calls[0][0] as (messages: ClaudeMessage[]) => ClaudeMessage[];
+    const previousMessages: ClaudeMessage[] = [
+      { type: 'user', content: 'previous question', timestamp: '2026-04-27T00:00:00.000Z' },
+      {
+        type: 'assistant',
+        content: 'previous answer',
+        timestamp: '2026-04-27T00:00:01.000Z',
+        durationMs: 1200,
+      },
+    ];
+
+    const nextMessages = updater(previousMessages);
+
+    expect(nextMessages).toHaveLength(3);
+    expect(nextMessages[1]).toMatchObject({
+      type: 'assistant',
+      content: 'previous answer',
+    });
+    expect(nextMessages[1]?.isStreaming).not.toBe(true);
+    expect(nextMessages[2]).toMatchObject({
+      type: 'assistant',
+      content: '',
       isStreaming: true,
       __turnId: 1,
     });
