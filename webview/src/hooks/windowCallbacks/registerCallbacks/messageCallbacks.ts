@@ -309,11 +309,26 @@ export function registerMessageCallbacks(
 
         const patchedAssistantIdx = findLastAssistantIndex(patched);
         if (patchedAssistantIdx >= 0 && patched[patchedAssistantIdx]?.type === 'assistant') {
-          streamingMessageIndexRef.current = patchedAssistantIdx;
-          patched[patchedAssistantIdx] = patchAssistantForStreaming({
-            ...patched[patchedAssistantIdx],
-            __turnId: streamingTurnIdRef.current,
-          });
+          const patchedAssistant = patched[patchedAssistantIdx];
+          const currentTurnId = streamingTurnIdRef.current;
+          // Only update streamingMessageIndexRef when the found assistant belongs
+          // to the current streaming turn.  When the backend snapshot hasn't
+          // caught up yet (no assistant for this turn), findLastAssistantIndex
+          // returns the PREVIOUS turn's assistant — overwriting the index and
+          // stamping __turnId would redirect all subsequent deltas (thinking /
+          // content) into the wrong message.
+          if (currentTurnId > 0 && patchedAssistant.__turnId !== undefined
+              && patchedAssistant.__turnId !== currentTurnId) {
+            // Backend snapshot doesn't include this turn's assistant yet.
+            // Preserve the index set by onStreamStart; the streaming assistant
+            // will be restored later by ensureStreamingAssistantPreserved via finalizeMessageList.
+          } else {
+            streamingMessageIndexRef.current = patchedAssistantIdx;
+            patched[patchedAssistantIdx] = patchAssistantForStreaming({
+              ...patchedAssistant,
+              __turnId: currentTurnId,
+            });
+          }
         }
 
         // Only skip updates when neither message structure nor non-text raw blocks

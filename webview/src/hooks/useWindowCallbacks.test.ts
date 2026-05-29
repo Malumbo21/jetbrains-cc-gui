@@ -1070,5 +1070,172 @@ describe('useWindowCallbacks integration', () => {
 
       expect(window.__deniedToolIds?.has('denied-1')).toBe(true);
     });
+
+    it('stale backend snapshot during streaming must not redirect streamingMessageIndexRef to prior-turn assistant', () => {
+      vi.stubGlobal('setTimeout', (callback: () => void) => {
+        callback();
+        return 1 as unknown as ReturnType<typeof setTimeout>;
+      });
+      vi.stubGlobal('clearTimeout', vi.fn());
+      vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      });
+      vi.stubGlobal('cancelAnimationFrame', vi.fn());
+
+      const assistant1: ClaudeMessage = {
+        type: 'assistant',
+        content: 'Using tool',
+        timestamp: '2026-01-01T00:00:01Z',
+        __turnId: 1,
+        isStreaming: false,
+        raw: {
+          message: {
+            content: [
+              { type: 'tool_use', id: 't1', name: 'bash', input: { command: 'ls' } },
+              { type: 'text', text: 'Using tool' },
+            ],
+          },
+        } as never,
+      };
+      const userToolResult: ClaudeMessage = {
+        type: 'user', content: '', timestamp: '2026-01-01T00:00:02Z',
+        raw: { content: [{ type: 'tool_result', tool_use_id: 't1', content: 'ok' }] } as never,
+      };
+
+      const initialMessages: ClaudeMessage[] = [
+        { type: 'user', content: 'question', timestamp: '2026-01-01T00:00:00Z' },
+        assistant1,
+        userToolResult,
+      ];
+
+      const { opts, buffer } = createOptsWithMessages(initialMessages);
+      // Simulate that turn 1 already completed
+      opts.turnIdCounterRef.current = 1;
+
+      renderHook(() => useWindowCallbacks(opts));
+
+      // --- Turn 2: onStreamStart creates new assistant at the end ---
+      act(() => { window.onStreamStart!(); });
+
+      // Verify the updater appended the new assistant with __turnId=2
+      expect(buffer.current.length).toBe(4);
+      expect(buffer.current[3]).toMatchObject({
+        type: 'assistant',
+        isStreaming: true,
+        __turnId: 2,
+      });
+
+      const correctStreamingIdx = opts.streamingMessageIndexRef.current;
+      expect(correctStreamingIdx).toBe(3);
+
+      // --- Stale backend snapshot arrives (still only has assistant1) ---
+      const staleSnapshot = [
+        { type: 'user', content: 'question', timestamp: '2026-01-01T00:00:00Z' },
+        {
+          type: 'assistant',
+          content: 'Using tool',
+          timestamp: '2026-01-01T00:00:01Z',
+          __turnId: 1,
+          raw: {
+            message: {
+              content: [
+                { type: 'tool_use', id: 't1', name: 'bash', input: { command: 'ls' } },
+                { type: 'text', text: 'Using tool' },
+              ],
+            },
+          },
+        },
+        { type: 'user', content: '', timestamp: '2026-01-01T00:00:02Z',
+          raw: { content: [{ type: 'tool_result', tool_use_id: 't1', content: 'ok' }] } },
+      ];
+
+      act(() => {
+        window.updateMessages!(JSON.stringify(staleSnapshot));
+      });
+
+      // streamingMessageIndexRef must NOT be redirected to index 1 (assistant1)
+      expect(opts.streamingMessageIndexRef.current).toBe(correctStreamingIdx);
+    });
+
+    it('guard branch: stale snapshot with equal length bypasses preserveLatestMessagesOnShrink and still preserves index', () => {
+      vi.stubGlobal('setTimeout', (callback: () => void) => {
+        callback();
+        return 1 as unknown as ReturnType<typeof setTimeout>;
+      });
+      vi.stubGlobal('clearTimeout', vi.fn());
+      vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      });
+      vi.stubGlobal('cancelAnimationFrame', vi.fn());
+
+      const assistant1: ClaudeMessage = {
+        type: 'assistant',
+        content: 'First reply',
+        timestamp: '2026-01-01T00:00:01Z',
+        __turnId: 1,
+        isStreaming: false,
+        raw: {
+          message: {
+            content: [{ type: 'text', text: 'First reply' }],
+          },
+        } as never,
+      };
+
+      const initialMessages: ClaudeMessage[] = [
+        { type: 'user', content: 'hello', timestamp: '2026-01-01T00:00:00Z' },
+        assistant1,
+      ];
+
+      const { opts, buffer } = createOptsWithMessages(initialMessages);
+      opts.turnIdCounterRef.current = 1;
+
+      renderHook(() => useWindowCallbacks(opts));
+
+      // --- Turn 2: onStreamStart creates new assistant at the end ---
+      act(() => { window.onStreamStart!(); });
+
+      expect(buffer.current.length).toBe(3);
+      expect(buffer.current[2]).toMatchObject({
+        type: 'assistant',
+        isStreaming: true,
+        __turnId: 2,
+      });
+
+      const correctStreamingIdx = opts.streamingMessageIndexRef.current;
+      expect(correctStreamingIdx).toBe(2);
+
+      // --- Stale backend snapshot with SAME length as prev (3 messages) ---
+      // preserveLatestMessagesOnShrink sees patched.length(3) >= prev.length(3)
+      // and returns early, so findLastAssistantIndex finds assistant1 (__turnId=1).
+      // The guard must block the stale redirect.
+      const staleSnapshot = [
+        { type: 'user', content: 'hello', timestamp: '2026-01-01T00:00:00Z' },
+        {
+          type: 'assistant',
+          content: 'First reply',
+          timestamp: '2026-01-01T00:00:01Z',
+          __turnId: 1,
+          raw: { message: { content: [{ type: 'text', text: 'First reply' }] } },
+        },
+        // Extra user message makes the snapshot length (3) >= prev length (3),
+        // preventing preserveLatestMessagesOnShrink from re-appending the streaming assistant.
+        { type: 'user', content: 'extra', timestamp: '2026-01-01T00:00:02Z' },
+      ];
+
+      act(() => {
+        window.updateMessages!(JSON.stringify(staleSnapshot));
+      });
+
+      // streamingMessageIndexRef must NOT be redirected to index 1 (assistant1)
+      expect(opts.streamingMessageIndexRef.current).not.toBe(1);
+      // It must point to the correct streaming assistant (__turnId=2)
+      const finalIdx = opts.streamingMessageIndexRef.current;
+      expect(buffer.current[finalIdx]).toMatchObject({
+        type: 'assistant',
+        __turnId: 2,
+      });
+    });
   });
 });
