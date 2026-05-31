@@ -27,6 +27,7 @@ public class SettingsHandler extends BaseMessageHandler {
     private final ModelProviderHandler modelProviderHandler;
     private final NodePathHandler nodePathHandler;
     private final ProjectConfigHandler projectConfigHandler;
+    private final CodexSubscriptionQuotaHandler codexSubscriptionQuotaHandler;
 
     private static final String[] SUPPORTED_TYPES = {
         "get_mode",
@@ -37,6 +38,7 @@ public class SettingsHandler extends BaseMessageHandler {
         "get_node_path",
         "set_node_path",
         "get_usage_statistics",
+        "get_codex_subscription_quota",
         "get_working_directory",
         "set_working_directory",
         "get_editor_font_config",
@@ -98,6 +100,7 @@ public class SettingsHandler extends BaseMessageHandler {
         this.modelProviderHandler = new ModelProviderHandler(context, usagePushService);
         this.nodePathHandler = new NodePathHandler(context);
         this.projectConfigHandler = new ProjectConfigHandler(context);
+        this.codexSubscriptionQuotaHandler = new CodexSubscriptionQuotaHandler(context);
         // Register theme change listener to automatically notify frontend when IDE theme changes
         registerThemeChangeListener();
     }
@@ -148,6 +151,9 @@ public class SettingsHandler extends BaseMessageHandler {
             // Project configuration
             case "get_usage_statistics":
                 projectConfigHandler.handleGetUsageStatistics(content);
+                return true;
+            case "get_codex_subscription_quota":
+                codexSubscriptionQuotaHandler.handleGetCodexSubscriptionQuota();
                 return true;
             case "get_working_directory":
                 projectConfigHandler.handleGetWorkingDirectory();

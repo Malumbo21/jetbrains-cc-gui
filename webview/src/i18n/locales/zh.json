@@ -1021,6 +1021,19 @@
       "empty": "暂无可用供应商",
       "switched": "已切换到 {{provider}}"
     },
+    "codexQuota": {
+      "title": "Codex 配额",
+      "loading": "正在加载配额...",
+      "unavailable": "配额不可用",
+      "lastUpdated": "更新于 {{value}}",
+      "fiveHour": "5 小时用量",
+      "weekly": "每周用量",
+      "windowRemainingPercent": "剩余 {{percent}}%",
+      "windowRemainingPercentWithReset": "剩余 {{percent}}% · 重置于 {{value}}",
+      "windowUsedOnly": "已用 {{used}}",
+      "windowDetail": "已用 {{used}} · 剩余 {{remaining}} / {{limit}}",
+      "windowUnavailable": "不可用"
+    },
     "nodeProcesses": {
       "title": "Node 进程管理",
       "badge": "{{total}} 个进程",

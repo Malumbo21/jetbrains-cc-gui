@@ -587,6 +587,11 @@ interface Window {
   updateCodexProviders?: (json: string) => void;
 
   /**
+   * Update Codex subscription quota snapshot.
+   */
+  updateCodexSubscriptionQuota?: (json: string) => void;
+
+  /**
    * Update active Codex provider
    */
   updateActiveCodexProvider?: (json: string) => void;
