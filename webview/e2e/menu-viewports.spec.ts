@@ -60,8 +60,14 @@ const CODEX_PROVIDERS_PAYLOAD = [
   { id: 'codex-proxy', name: 'Codex Proxy', remark: 'workspace config', isActive: false },
 ];
 
+const LONG_MODEL = {
+  id: 'vendor/super-long-model-name-that-should-not-force-horizontal-overflow-in-selector-menus',
+  label: 'Extremely Long Claude-Compatible Model Display Name With Multiple Provider And Capability Suffixes',
+  description: 'A very long model description that should remain clipped inside the selector row instead of pushing the dropdown outside the visible webview viewport.',
+};
+
 async function installBridgeMocks(page: Page) {
-  await page.addInitScript(({ processSnapshot, claudeProviders, codexProviders }) => {
+  await page.addInitScript(({ processSnapshot, claudeProviders, codexProviders, longModel }) => {
     localStorage.setItem('model-selection-state', JSON.stringify({
       provider: 'claude',
       claudeModel: 'claude-sonnet-4-6',
@@ -71,6 +77,7 @@ async function installBridgeMocks(page: Page) {
       longContextEnabled: true,
       reasoningEffort: 'high',
     }));
+    localStorage.setItem('claude-custom-models', JSON.stringify([longModel]));
     localStorage.setItem('lastSeenChangelogVersion', '0.4.4');
 
     const hideVConsole = () => {
@@ -102,6 +109,7 @@ async function installBridgeMocks(page: Page) {
     processSnapshot: NODE_PROCESS_SNAPSHOT,
     claudeProviders: CLAUDE_PROVIDERS_PAYLOAD,
     codexProviders: CODEX_PROVIDERS_PAYLOAD,
+    longModel: LONG_MODEL,
   });
 }
 
@@ -130,6 +138,18 @@ async function expectInsideViewport(page: Page, locator: Locator, label: string)
   expect(box.y, `${label} top edge`).toBeGreaterThanOrEqual(-tolerance);
   expect(box.x + box.width, `${label} right edge`).toBeLessThanOrEqual(viewport.width + tolerance);
   expect(box.y + box.height, `${label} bottom edge`).toBeLessThanOrEqual(viewport.height + tolerance);
+}
+
+async function expectContainedWithin(container: Locator, child: Locator, label: string) {
+  const containerBox = await container.boundingBox();
+  const childBox = await child.boundingBox();
+  expect(containerBox, `${label} container should have a visible bounding box`).not.toBeNull();
+  expect(childBox, `${label} child should have a visible bounding box`).not.toBeNull();
+  if (!containerBox || !childBox) return;
+
+  const tolerance = 2;
+  expect(childBox.x, `${label} left edge`).toBeGreaterThanOrEqual(containerBox.x - tolerance);
+  expect(childBox.x + childBox.width, `${label} right edge`).toBeLessThanOrEqual(containerBox.x + containerBox.width + tolerance);
 }
 
 async function expectSubmenuAnchoredToRow(page: Page, trigger: Locator, submenu: Locator, label: string) {
@@ -229,6 +249,39 @@ test('config submenus stay visible across constrained viewports', async ({ page 
   await expect(agentDropdown).toBeVisible();
   await expectInsideViewport(page, agentDropdown, 'agent submenu');
   await expectSubmenuAnchoredToRow(page, agentRow, agentDropdown, 'agent submenu');
+
+  expect(significantErrors(errors)).toEqual([]);
+});
+
+test('long model and mode text stays contained in selector menus', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  await page.goto('/');
+  await expect(page.locator('.button-area-left')).toBeVisible();
+
+  const buttons = page.locator('.button-area-left .selector-button');
+  await expect(buttons).toHaveCount(5);
+
+  await buttons.nth(2).click();
+  const modeDropdown = page.locator('.selector-dropdown').first();
+  await expect(modeDropdown).toBeVisible();
+  await expectInsideViewport(page, modeDropdown, 'mode dropdown with long descriptions');
+  const longModeOption = modeDropdown.locator('.selector-option').filter({ hasText: 'Fully automated' }).first();
+  const longModeDescription = longModeOption.locator('span').filter({ hasText: 'Fully automated' }).first();
+  await expect(longModeDescription).toBeVisible();
+  await expectContainedWithin(longModeOption, longModeDescription, 'long mode description');
+  await closeOpenMenus(page);
+
+  await buttons.nth(3).click();
+  const modelDropdown = page.locator('.selector-dropdown').first();
+  await expect(modelDropdown).toBeVisible();
+  await expectInsideViewport(page, modelDropdown, 'model dropdown with long custom model');
+  const longModelOption = modelDropdown.locator('.selector-option').filter({ hasText: LONG_MODEL.label }).first();
+  const longModelLabel = longModelOption.locator('span').filter({ hasText: LONG_MODEL.label }).first();
+  const longModelDescription = longModelOption.locator('span').filter({ hasText: LONG_MODEL.description }).first();
+  await expect(longModelLabel).toBeVisible();
+  await expect(longModelDescription).toBeVisible();
+  await expectContainedWithin(longModelOption, longModelLabel, 'long model label');
+  await expectContainedWithin(longModelOption, longModelDescription, 'long model description');
 
   expect(significantErrors(errors)).toEqual([]);
 });
