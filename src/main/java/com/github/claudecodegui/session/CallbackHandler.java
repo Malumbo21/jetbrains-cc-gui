@@ -131,6 +131,16 @@ public class CallbackHandler {
     }
 
     /**
+     * Notify that a block reset signal was received.
+     * Frontend should clear streaming content refs to prevent cross-turn merging.
+     */
+    public void notifyBlockReset() {
+        if (callback != null) {
+            callback.onBlockReset();
+        }
+    }
+
+    /**
      * Notify of a usage update.
      */
     public void notifyUsageUpdate(int usedTokens, int maxTokens) {

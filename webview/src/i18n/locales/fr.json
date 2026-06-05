@@ -12,6 +12,7 @@
     "close": "Fermer",
     "newSession": "Nouvelle session",
     "newTab": "Nouvel onglet",
+    "dontAskAgain": "Ne plus demander",
     "history": "Historique",
     "settings": "Paramètres",
     "thinking": "Réflexion",
@@ -90,6 +91,22 @@
     "streamingConnected": "{{provider}} connecté, en train de comprendre votre question",
     "showEarlierMessages": "Afficher {{count}} messages précédents",
     "totalDuration": "Cette réponse a pris",
+    "search": {
+      "ariaLabel": "Rechercher dans la conversation",
+      "placeholder": "Rechercher dans la conversation…",
+      "next": "Résultat suivant (Entrée)",
+      "previous": "Résultat précédent (Maj+Entrée)",
+      "close": "Fermer (Échap)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "Aucun résultat",
+      "searching": "Recherche en cours…",
+      "expandedHint": "{{count}} messages précédents développés",
+      "matchCase": "Respecter la casse (Alt+C)",
+      "wholeWord": "Mot entier (Alt+W)",
+      "regex": "Expression régulière (Alt+R)",
+      "invalidRegex": "Regex invalide",
+      "openTooltip": "Rechercher dans la conversation (Cmd/Ctrl+F)"
+    },
     "compactSummary": {
       "summarizedConversation": "Conversation résumée",
       "compactSummary": "Résumé compact",
@@ -228,6 +245,12 @@
         "custom": "Personnalisé",
         "reset": "Réinitialiser",
         "hint": "Personnaliser la couleur de fond de vos messages. Laisser vide pour suivre le thème par défaut."
+      },
+      "newSessionConfirm": {
+        "label": "Confirmation de nouvelle session",
+        "enabled": "Activé",
+        "disabled": "Désactivé",
+        "hint": "Lorsqu'elle est désactivée, créer une nouvelle session dans une conversation contenant des messages se fera directement, sans afficher la boîte de dialogue de confirmation."
       }
     },
     "providers": "Gestion des fournisseurs",
@@ -802,6 +825,44 @@
       "empty": "Aucun fournisseur disponible",
       "switched": "Basculé vers {{provider}}"
     },
+    "nodeProcesses": {
+      "title": "Gestionnaire de processus Node",
+      "badge": "{{total}} processus",
+      "badgeWithOrphan": "{{total}} · {{orphan}} orphelin ⚠",
+      "summary": "Total : {{total}} · Orphelins : {{orphan}}",
+      "loading": "Chargement des processus...",
+      "empty": "Aucun processus Node actif",
+      "refresh": "Actualiser",
+      "groups": {
+        "daemon": "Processus daemon",
+        "channel": "Conversations en cours",
+        "orphan": "Processus orphelins"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "Canal",
+        "orphanShort": "Orphelin"
+      },
+      "kill": "Terminer",
+      "interrupt": "Arrêter",
+      "restart": "Redémarrer",
+      "pending": "Traitement...",
+      "killAll": "Nettoyer les orphelins ({{count}})",
+      "killHint": "Forcer la fin de ce processus Node",
+      "killAllHint": "Terminer tous les processus orphelins détectés",
+      "restartHint": "Arrête le daemon ; le prochain message en démarrera un nouveau automatiquement",
+      "killConfirmTitle": "Terminer ce processus ?",
+      "killConfirm": "Terminer le processus PID {{pid}} ? Les conversations en cours peuvent être perdues.",
+      "restartConfirmTitle": "Redémarrer le daemon ?",
+      "restartConfirm": "Redémarrer le daemon ? Les conversations actives seront interrompues.",
+      "killAllConfirmTitle": "Nettoyer tous les processus orphelins ?",
+      "killAllConfirm": "Terminer les {{count}} processus orphelins ?",
+      "killSuccess": "Processus terminé",
+      "killAllSuccess": "{{count}} processus orphelin(s) nettoyé(s)",
+      "restartSuccess": "Daemon arrêté ; une nouvelle instance démarrera automatiquement au prochain message",
+      "killFailed": "Échec de la fin : {{error}}",
+      "activeRequests": "{{count}} en cours"
+    },
     "link": "Lien"
   },
   "markdown": {
@@ -1230,7 +1291,7 @@
       },
       "opus46": {
         "label": "Opus 4.7",
-        "description": "Opus 4.7 · Le plus récent et le plus performant"
+        "description": "Opus 4.7 · Modèle phare précédent"
       },
       "opus46_1m": {
         "label": "Opus 4.6",
@@ -1239,6 +1300,10 @@
       "haiku45": {
         "label": "Haiku 4.5",
         "description": "Haiku 4.5 · Le plus rapide pour des réponses rapides"
+      },
+      "opus48": {
+        "label": "Opus 4.8",
+        "description": "Opus 4.8 · Le plus récent et le plus performant"
       }
     },
     "longContext": {
@@ -1488,6 +1553,22 @@
         "downgrade": {
           "title": "Option 2 : Revenir à une version antérieure",
           "step0": "Dans Gestion des dépendances, passez la version du SDK à v0.2.112 ou antérieure. Redémarrez IDEA après le changement."
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — échec du lancement du processus enfant",
+      "intro": "Cette erreur est généralement causée par une version de Node.js incompatible ou une installation incomplète du SDK. Essayez les deux options ci-dessous dans l'ordre :",
+      "reason": "EBUSY est une erreur système levée par Node.js lorsqu'un processus enfant ne peut pas être lancé en raison d'une ressource occupée. Causes courantes : problèmes de compatibilité avec Node.js 24, un SDK obsolète, ou une installation incomplète depuis le miroir Taobao.",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "Option 1 : Vérifiez votre version de Node.js",
+          "step0": "Exécutez la commande ci-dessous dans un terminal pour voir votre version. Node 22 ou la LTS actuelle est recommandée — les utilisateurs ont signalé de nombreux problèmes sur Node 24, préférez donc Node 20 ou 22 :"
+        },
+        "reinstallLatestSdk": {
+          "title": "Option 2 : Réinstaller le dernier SDK depuis le registre npm officiel",
+          "step0": "1. Basculez vers le registre npm officiel (évitez le miroir Taobao — il peut ne pas avoir la dernière version) :",
+          "step1": "2. Ouvrez Gestion des dépendances et réinstallez le dernier SDK :"
         }
       }
     }

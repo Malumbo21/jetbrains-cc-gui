@@ -10,6 +10,7 @@ import com.github.claudecodegui.settings.CodemossSettingsService;
 import com.github.claudecodegui.i18n.ClaudeCodeGuiBundle;
 import com.github.claudecodegui.dependency.DependencyManager;
 import com.github.claudecodegui.bridge.NodeDetector;
+import com.github.claudecodegui.bridge.ProcessManager;
 import com.github.claudecodegui.provider.common.BaseSDKBridge;
 import com.github.claudecodegui.provider.common.MessageCallback;
 import com.github.claudecodegui.provider.common.SDKResult;
@@ -606,6 +607,13 @@ public class CodexSDKBridge extends BaseSDKBridge {
      */
     public CompletableFuture<JsonObject> getMcpServerTools(String serverId, JsonObject serverConfig) {
         return CompletableFuture.supplyAsync(() -> {
+            // L10 fix: unique channelId per call. The original code used the
+            // constant "__codex_mcp_tools__" as the registration key. Concurrent
+            // calls would overwrite each other's Process reference in the
+            // ConcurrentHashMap, leaving the displaced entry leaked (no path could
+            // unregister it because the lookup key now points to the newer
+            // Process). UUID suffix makes each call independent.
+            String channelId = ProcessManager.newChannelId("__codex_mcp_tools__");
             Process process = null;
             long startTime = System.currentTimeMillis();
             LOG.info("[CodexMcpTools] Starting getMcpServerTools, serverId=" + serverId);
@@ -645,7 +653,7 @@ public class CodexSDKBridge extends BaseSDKBridge {
                 injectCustomEnvVars(pb.environment(), "mcp");
 
                 process = pb.start();
-                processManager.registerProcess("__codex_mcp_tools__", process);
+                processManager.registerProcess(channelId, process);
                 final Process finalProcess = process;
 
                 try (java.io.OutputStream stdin = process.getOutputStream()) {
@@ -731,7 +739,7 @@ public class CodexSDKBridge extends BaseSDKBridge {
                             PlatformUtils.terminateProcess(process);
                         }
                     } finally {
-                        processManager.unregisterProcess("__codex_mcp_tools__", process);
+                        processManager.unregisterProcess(channelId, process);
                     }
                 }
             }

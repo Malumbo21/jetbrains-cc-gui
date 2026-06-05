@@ -12,6 +12,7 @@
     "close": "Close",
     "newSession": "New Session",
     "newTab": "New Tab",
+    "dontAskAgain": "Don't ask again",
     "history": "History",
     "settings": "Settings",
     "thinking": "Thinking",
@@ -90,6 +91,22 @@
     "streamingConnected": "{{provider}} connected, understanding your question",
     "showEarlierMessages": "Show {{count}} earlier messages",
     "totalDuration": "This reply took",
+    "search": {
+      "ariaLabel": "Search in conversation",
+      "placeholder": "Search in conversation…",
+      "next": "Next match (Enter)",
+      "previous": "Previous match (Shift+Enter)",
+      "close": "Close (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "No results",
+      "searching": "Searching…",
+      "expandedHint": "Expanded {{count}} earlier messages",
+      "matchCase": "Match Case (Alt+C)",
+      "wholeWord": "Match Whole Word (Alt+W)",
+      "regex": "Use Regular Expression (Alt+R)",
+      "invalidRegex": "Invalid regex",
+      "openTooltip": "Search in conversation (Cmd/Ctrl+F)"
+    },
     "compactSummary": {
       "summarizedConversation": "Summarized conversation",
       "compactSummary": "Compact summary",
@@ -277,6 +294,12 @@
         "custom": "Custom",
         "reset": "Reset",
         "hint": "Customize the background color of your messages. Leave empty to follow the theme default."
+      },
+      "newSessionConfirm": {
+        "label": "New Session Confirmation",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When disabled, creating a new session in a conversation with existing messages will skip the confirmation dialog."
       }
     },
     "providers": "Provider Management",
@@ -981,6 +1004,44 @@
       "empty": "No providers available",
       "switched": "Switched to {{provider}}"
     },
+    "nodeProcesses": {
+      "title": "Node Process Manager",
+      "badge": "{{total}} processes",
+      "badgeWithOrphan": "{{total}} · {{orphan}} orphan ⚠",
+      "summary": "Total: {{total}} · Orphans: {{orphan}}",
+      "loading": "Loading processes...",
+      "empty": "No active Node processes",
+      "refresh": "Refresh",
+      "groups": {
+        "daemon": "Daemon Processes",
+        "channel": "Active Conversations",
+        "orphan": "Orphan Processes"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "Channel",
+        "orphanShort": "Orphan"
+      },
+      "kill": "Kill",
+      "interrupt": "Stop",
+      "restart": "Restart",
+      "pending": "Working...",
+      "killAll": "Clean up orphans ({{count}})",
+      "killHint": "Force terminate this Node process",
+      "killAllHint": "Kill every detected orphan process",
+      "restartHint": "Stop the daemon; the next message will spawn a fresh one",
+      "killConfirmTitle": "Terminate process?",
+      "killConfirm": "Kill process PID {{pid}}? Any in-flight conversation will be lost.",
+      "restartConfirmTitle": "Restart daemon?",
+      "restartConfirm": "Restart the daemon? Active conversations will be interrupted.",
+      "killAllConfirmTitle": "Clean up all orphans?",
+      "killAllConfirm": "Kill all {{count}} orphan processes?",
+      "killSuccess": "Process terminated",
+      "killAllSuccess": "Cleaned up {{count}} orphan process(es)",
+      "restartSuccess": "Daemon stopped; a new instance will start automatically on the next message",
+      "killFailed": "Kill failed: {{error}}",
+      "activeRequests": "{{count}} in-flight"
+    },
     "link": "Link"
   },
   "markdown": {
@@ -1458,7 +1519,7 @@
       },
       "opus46": {
         "label": "Opus 4.7",
-        "description": "Opus 4.7 · Latest and most capable"
+        "description": "Opus 4.7 · Previous flagship model"
       },
       "opus46_1m": {
         "label": "Opus 4.6",
@@ -1467,6 +1528,10 @@
       "haiku45": {
         "label": "Haiku 4.5",
         "description": "Haiku 4.5 · Fastest for quick answers"
+      },
+      "opus48": {
+        "label": "Opus 4.8",
+        "description": "Opus 4.8 · Latest and most capable"
       }
     },
     "codex": {
@@ -1748,6 +1813,22 @@
         "downgrade": {
           "title": "Option 2: Roll back to an older version",
           "step0": "In Dependency Management, switch the SDK version to v0.2.112 or earlier. Restart IDEA after switching."
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — child process failed to launch",
+      "intro": "This error is typically caused by an incompatible Node.js version or an incomplete SDK installation. Try the two options below in order:",
+      "reason": "EBUSY is a system error raised by Node.js when a child process can't be launched due to a busy resource. Common causes: Node.js 24 compatibility issues, an outdated SDK, or an incomplete install from the Taobao mirror.",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "Option 1: Check your Node.js version",
+          "step0": "Run the command below in a terminal to see your version. Node 22 or the current LTS is recommended — users have reported many issues on Node 24, so prefer Node 20 or 22:"
+        },
+        "reinstallLatestSdk": {
+          "title": "Option 2: Reinstall the latest SDK from the official npm registry",
+          "step0": "1. Switch to the official npm registry (avoid the Taobao mirror — it may not have the latest version):",
+          "step1": "2. Open Dependency Management and reinstall the latest SDK:"
         }
       }
     }

@@ -13,6 +13,62 @@ export interface ChangelogEntry {
 
 export const CHANGELOG_DATA: ChangelogEntry[] = [
   {
+    version: '0.4.4',
+    date: '2026-05-29',
+    content: {
+      en: `✨ Features
+- Add Node Process Manager panel (under "Switch Current Provider"): lists all Node.js child processes grouped into Daemon / Active Channels / Orphan with PID, uptime, memory, and per-process Kill / Restart / Interrupt actions, plus a one-click "Clean up all orphans" button
+- Add orphan process scanner that flags Node processes matching \`daemon.js\` / \`channel-manager.js\` not in our registries, with a live process count badge that turns red when orphans are detected
+- Add in-conversation search panel (Cmd+F / Ctrl+F) with Prev/Next navigation, hit count, auto-expanding folds, and Match Case / Whole Word / Regex toggles (Alt+C / Alt+W / Alt+R)
+- Add a "Don't ask again" checkbox to the new-session confirm dialog, synced with Settings → Basic → Behavior (interrupting a running AI still always confirms)
+- Add Claude Opus 4.8 model support (200K / 1M context), marked as the latest flagship
+- Add \`spawn EBUSY\` error pattern with recommended fixes across 11 locales
+
+🐛 Fixes
+- Fix Codex history sessions failing to load due to payload-parsing variable shadows and a missing \`cmd\`→\`command\` field mapping in history replay
+- Fix Claude daemon process leak on Claude → Codex tab switch, and orphan scanner falsely claiming daemons from other IDE instances
+- Fix Node.js child process leaks across 11 short-lived subprocess paths (L1-L11): all children are now registered with \`ProcessManager\` and force-killed on cleanup
+- Fix \`PromptEnhancerHandler\` blocking forever on stalled SDK calls (async stdout drain + 60s timeout)
+- Fix character loss and duplication in streaming deltas, including snapshot-path mis-slicing of mid-stream corrective rewrites (by @Cyber0xFE)
+- Fix new assistant turns being overwritten when the frontend reloads mid-stream (by @gadfly3173)
+- Fix cross-turn streaming state leak that fragmented thinking text and re-emitted whole blocks
+- Fix \`PreToolUseHook\` returning the invalid \`permissionDecision: 'continue'\` that threw \`ZodError\` on every tool call; use top-level \`continue: true\` instead (by @devlimits)
+- Fix JCEF render ghosting on macOS and draft attachments drifting into a new conversation
+- Fix \`killByPid\` being able to terminate arbitrary process trees; restrict to PIDs owned by this JVM (security)
+
+🔧 Improvements
+- Add project-scoped \`NodeProcessRegistry\` aggregating Node process state across all chat windows
+- Show the tab's actual provider (claude/codex) as the daemon label instead of a hard-coded "claude"
+- Add an SDK hook output validator that guarantees hook returns pass the SDK Zod schema, guarding against the \`permissionDecision\` regression class
+- Tighten \`daemon.js\` parent-PID polling from 10s to 3s`,
+      zh: `✨ Features
+- 新增「Node 进程管理」面板（"切换当前供应商"下方）：集中展示所有 Node.js 子进程，按守护进程 / 进行中对话 / 孤立进程分组，显示 PID、运行时长、内存，并提供终止 / 重启 / 中断按钮，底部一键"清理所有孤立进程"
+- 新增孤立进程扫描器，标记含 \`daemon.js\` / \`channel-manager.js\` 但不在注册表中的 Node 进程；设置菜单实时进程徽章在检测到孤立进程时变红
+- 新增会话内搜索面板（Cmd+F / Ctrl+F），支持上一个/下一个、命中计数、自动展开折叠，以及 Match Case / Whole Word / Regex 开关（Alt+C / Alt+W / Alt+R）
+- 新建会话确认弹窗新增"不再提示"复选框，与设置 → 基础 → 行为双向同步（中断运行中 AI 仍强制确认）
+- 新增 Claude Opus 4.8 模型支持（200K / 1M 上下文），标记为最新旗舰
+- 新增 \`spawn EBUSY\` 错误模式及推荐解决方案，覆盖 11 种语言
+
+🐛 Fixes
+- 修复 Codex 历史会话点不开的问题：根因是 payload 解析变量影子写错，以及历史回放缺少 \`cmd\`→\`command\` 字段映射
+- 修复 Claude → Codex Tab 切换后 Claude daemon 泄漏，以及孤立进程扫描器误判其他 IDE 实例 daemon 的问题
+- 修复 11 处 Node.js 短生命周期子进程泄漏（L1-L11）：所有子进程现在都注册到 \`ProcessManager\` 并在清理时强制终止
+- 修复 \`PromptEnhancerHandler\` 在 SDK 卡死时永久阻塞的问题（异步消耗 stdout + 60 秒超时）
+- 修复流式增量中字符丢失和重复的问题，包括快照路径对中途修正重写的错误切片（by @Cyber0xFE）
+- 修复前端在流式过程中重载时新一轮回复被覆盖的问题（by @gadfly3173）
+- 修复跨 turn 流式状态泄漏导致思考文本碎裂、整块内容重复的问题
+- 修复 \`PreToolUseHook\` 返回非法 \`permissionDecision: 'continue'\` 导致每次工具调用都抛 \`ZodError\` 的问题，改用顶层 \`continue: true\`（by @devlimits）
+- 修复 macOS 上 JCEF 渲染残影及草稿附件漂移到新会话的问题
+- 修复 \`killByPid\` 可终止任意进程树的问题，限制为仅终止当前 JVM 拥有的 PID（安全）
+
+🔧 Improvements
+- 新增项目级 \`NodeProcessRegistry\`，跨所有聊天窗口聚合 Node 进程状态
+- 进程面板 daemon 标签改为显示 Tab 实际 provider（claude/codex），不再硬编码 "claude"
+- 新增 SDK hook 返回值校验器，确保 hook 返回能通过 SDK Zod 校验，防范 \`permissionDecision\` 类回归
+- 将 \`daemon.js\` 父进程心跳从 10s 收紧到 3s`,
+    },
+  },
+  {
     version: '0.4.3',
     date: '2026-05-22',
     content: {

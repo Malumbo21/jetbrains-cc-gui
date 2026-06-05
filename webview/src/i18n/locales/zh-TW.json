@@ -12,6 +12,7 @@
     "close": "關閉",
     "newSession": "新會話",
     "newTab": "新標籤頁",
+    "dontAskAgain": "不再詢問",
     "history": "歷史記錄",
     "settings": "設定",
     "thinking": "思考",
@@ -90,6 +91,22 @@
     "streamingConnected": "{{provider}} 已成功連接，正在理解問題",
     "showEarlierMessages": "顯示之前的 {{count}} 則訊息",
     "totalDuration": "本次耗時",
+    "search": {
+      "ariaLabel": "在對話中搜尋",
+      "placeholder": "在對話中搜尋...",
+      "next": "下一個符合 (Enter)",
+      "previous": "上一個符合 (Shift+Enter)",
+      "close": "關閉 (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "無結果",
+      "searching": "搜尋中...",
+      "expandedHint": "已展開 {{count}} 則早期訊息",
+      "matchCase": "區分大小寫 (Alt+C)",
+      "wholeWord": "全字符合 (Alt+W)",
+      "regex": "正規表達式 (Alt+R)",
+      "invalidRegex": "正規表達式無效",
+      "openTooltip": "在對話中搜尋 (Cmd/Ctrl+F)"
+    },
     "compactSummary": {
       "summarizedConversation": "已總結的對話",
       "compactSummary": "對話摘要",
@@ -228,6 +245,12 @@
         "custom": "自訂",
         "reset": "恢復預設",
         "hint": "自訂您的訊息背景顏色，留空則跟隨主題預設顏色"
+      },
+      "newSessionConfirm": {
+        "label": "建立新會話時二次確認",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "關閉後，在已有訊息的會話中點選新建將直接建立，不再彈出確認視窗"
       }
     },
     "providers": "供應商管理",
@@ -807,6 +830,44 @@
       "empty": "暫無可用供應商",
       "switched": "已切換到 {{provider}}"
     },
+    "nodeProcesses": {
+      "title": "Node 進程管理",
+      "badge": "{{total}} 個進程",
+      "badgeWithOrphan": "{{total}} 個 · {{orphan}} 孤立 ⚠",
+      "summary": "共 {{total}} 個 · 孤立 {{orphan}} 個",
+      "loading": "正在載入進程資訊...",
+      "empty": "目前沒有作用中的 Node 進程",
+      "refresh": "重新整理",
+      "groups": {
+        "daemon": "常駐進程",
+        "channel": "進行中對話",
+        "orphan": "孤立進程"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "對話",
+        "orphanShort": "孤立"
+      },
+      "kill": "終止",
+      "interrupt": "中斷",
+      "restart": "重啟",
+      "pending": "處理中...",
+      "killAll": "清理所有孤立進程 ({{count}})",
+      "killHint": "強制結束此 Node 進程",
+      "killAllHint": "一鍵清理所有失控的孤立進程",
+      "restartHint": "關閉常駐進程，下一則訊息時會自動重新啟動",
+      "killConfirmTitle": "終止此進程？",
+      "killConfirm": "確認終止 PID {{pid}}？當前對話可能遺失。",
+      "restartConfirmTitle": "重啟常駐進程？",
+      "restartConfirm": "確認重啟常駐進程？正在進行的對話會被中斷。",
+      "killAllConfirmTitle": "清理所有孤立進程？",
+      "killAllConfirm": "確認終止全部 {{count}} 個孤立進程？",
+      "killSuccess": "進程已終止",
+      "killAllSuccess": "已清理 {{count}} 個孤立進程",
+      "restartSuccess": "常駐進程已關閉，下一則訊息會自動啟動新實例",
+      "killFailed": "終止失敗：{{error}}",
+      "activeRequests": "{{count}} 個進行中"
+    },
     "link": "連結"
   },
   "markdown": {
@@ -1235,7 +1296,7 @@
       },
       "opus46": {
         "label": "Opus 4.7",
-        "description": "Opus 4.7 · 最新最強大的模型"
+        "description": "Opus 4.7 · 上一代旗艦模型"
       },
       "opus46_1m": {
         "label": "Opus 4.6",
@@ -1244,6 +1305,10 @@
       "haiku45": {
         "label": "Haiku 4.5",
         "description": "Haiku 4.5 · 速度最快，適合快速回覆"
+      },
+      "opus48": {
+        "label": "Opus 4.8",
+        "description": "Opus 4.8 · 最新最強大的模型"
       }
     },
     "longContext": {
@@ -1493,6 +1558,22 @@
         "downgrade": {
           "title": "方案二：版本回退",
           "step0": "在「相依性管理」中將 SDK 版本切換到 v0.2.112 或更早版本，切換後需要重新啟動 IDEA。"
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — 子處理程序啟動失敗",
+      "intro": "此錯誤通常由 Node.js 版本不相容或 SDK 安裝不完整引起，按以下兩個方向排查通常可解決：",
+      "reason": "EBUSY 是 Node.js 啟動子處理程序時遇到資源忙碌的系統錯誤。常見原因：Node.js 24 相容性問題、SDK 版本過舊，或使用淘寶源安裝時同步不完整。",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "方案一：檢查 Node.js 版本",
+          "step0": "在終端機執行以下指令查看版本號。建議使用 Node 22 或目前最新 LTS 版本 — 使用者反饋 Node 24 報錯較多，請優先使用 20 或 22："
+        },
+        "reinstallLatestSdk": {
+          "title": "方案二：用 npm 官方源重新安裝最新版 SDK",
+          "step0": "1. 切換到 npm 官方源（淘寶源可能未同步最新版本，請勿使用淘寶源安裝）：",
+          "step1": "2. 開啟「相依性管理」重新安裝最新版 SDK："
         }
       }
     }

@@ -23,6 +23,7 @@ import {
 } from '../messageSync';
 import { releaseSessionTransition } from '../sessionTransition';
 import { parseSequence } from '../parseSequence';
+import { collectUnresolvedToolUseIds } from './streamingCallbacks';
 
 const isTruthy = (v: unknown) => v === true || v === 'true';
 
@@ -308,11 +309,18 @@ export function registerMessageCallbacks(
 
         const patchedAssistantIdx = findLastAssistantIndex(patched);
         if (patchedAssistantIdx >= 0 && patched[patchedAssistantIdx]?.type === 'assistant') {
-          streamingMessageIndexRef.current = patchedAssistantIdx;
-          patched[patchedAssistantIdx] = patchAssistantForStreaming({
-            ...patched[patchedAssistantIdx],
-            __turnId: streamingTurnIdRef.current,
-          });
+          const patchedAssistant = patched[patchedAssistantIdx];
+          const currentTurnId = streamingTurnIdRef.current;
+          // Stale: backend snapshot hasn't caught up — findLastAssistantIndex returns prior turn's assistant
+          const isStaleSnapshot = currentTurnId > 0 && patchedAssistant.__turnId !== undefined
+            && patchedAssistant.__turnId !== currentTurnId;
+          if (!isStaleSnapshot) {
+            streamingMessageIndexRef.current = patchedAssistantIdx;
+            patched[patchedAssistantIdx] = patchAssistantForStreaming({
+              ...patchedAssistant,
+              __turnId: currentTurnId,
+            });
+          }
         }
 
         // Only skip updates when neither message structure nor non-text raw blocks
@@ -611,10 +619,29 @@ export function registerMessageCallbacks(
     }
     window.__lastStreamEndedTurnId = undefined;
     window.__lastStreamEndedAt = undefined;
+    // FIX: A replayed session may include aborted turns where some function_call
+    // entries never received a function_call_output (user pressed STOP, write_stdin
+    // was filtered out, etc.). Without this scan, BashToolGroupBlock / EditToolGroupBlock
+    // render those tool_use blocks as perpetual loading spinners because parseBashItem
+    // treats `result == null` as "still running". onStreamEnd is NEVER fired during
+    // history replay, so the equivalent cleanup there does not help here.
+    if (!window.__deniedToolIds) {
+      window.__deniedToolIds = new Set<string>();
+    }
+    // Compute orphans inside the updater (needs the latest message list) but keep
+    // the __deniedToolIds mutation OUTSIDE it — a setMessages updater must stay
+    // pure, and React StrictMode double-invokes it. Mirrors onStreamEnd's pattern.
+    let orphanIds: string[] = [];
     setMessages((prev) => {
       if (prev.length === 0) return prev;
+      orphanIds = collectUnresolvedToolUseIds(prev, 'all');
+      // Shallow copy forces ChatMessages to re-render so the now-denied IDs are
+      // picked up by BashToolGroupBlock's deniedToolIds prop.
       return prev.map(m => ({ ...m }));
     });
+    for (const id of orphanIds) {
+      window.__deniedToolIds.add(id);
+    }
   };
 
   window.addUserMessage = (content: string) => {

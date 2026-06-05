@@ -12,6 +12,7 @@
     "close": "关闭",
     "newSession": "新会话",
     "newTab": "新标签页",
+    "dontAskAgain": "不再提示",
     "history": "历史记录",
     "settings": "设置",
     "thinking": "思考",
@@ -90,6 +91,22 @@
     "streamingConnected": "{{provider}} 已成功连接，正在理解问题",
     "showEarlierMessages": "显示之前的 {{count}} 条消息",
     "totalDuration": "本次耗时",
+    "search": {
+      "ariaLabel": "在对话中搜索",
+      "placeholder": "在对话中搜索…",
+      "next": "下一个匹配 (Enter)",
+      "previous": "上一个匹配 (Shift+Enter)",
+      "close": "关闭 (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "无结果",
+      "searching": "搜索中…",
+      "expandedHint": "已展开 {{count}} 条早期消息",
+      "matchCase": "区分大小写 (Alt+C)",
+      "wholeWord": "全词匹配 (Alt+W)",
+      "regex": "正则表达式 (Alt+R)",
+      "invalidRegex": "正则无效",
+      "openTooltip": "在对话中搜索 (Cmd/Ctrl+F)"
+    },
     "compactSummary": {
       "summarizedConversation": "已总结的对话",
       "compactSummary": "对话摘要",
@@ -277,6 +294,12 @@
         "custom": "自定义",
         "reset": "恢复默认",
         "hint": "自定义您的消息背景颜色，留空则跟随主题默认颜色"
+      },
+      "newSessionConfirm": {
+        "label": "新建会话时二次确认",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "关闭后，在已有消息的会话中点击新建将直接创建，不再弹出确认窗口"
       }
     },
     "providers": "供应商管理",
@@ -986,6 +1009,44 @@
       "empty": "暂无可用供应商",
       "switched": "已切换到 {{provider}}"
     },
+    "nodeProcesses": {
+      "title": "Node 进程管理",
+      "badge": "{{total}} 个进程",
+      "badgeWithOrphan": "{{total}} 个 · {{orphan}} 孤立 ⚠",
+      "summary": "共 {{total}} 个 · 孤立 {{orphan}} 个",
+      "loading": "正在加载进程信息...",
+      "empty": "当前没有活跃的 Node 进程",
+      "refresh": "刷新",
+      "groups": {
+        "daemon": "守护进程",
+        "channel": "进行中对话",
+        "orphan": "孤立进程"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "对话",
+        "orphanShort": "孤立"
+      },
+      "kill": "终止",
+      "interrupt": "中断",
+      "restart": "重启",
+      "pending": "处理中...",
+      "killAll": "清理所有孤立进程 ({{count}})",
+      "killHint": "强制结束该 Node 进程",
+      "killAllHint": "一键清理所有失控的孤立进程",
+      "restartHint": "关闭守护进程，下一条消息时会自动重新启动",
+      "killConfirmTitle": "终止该进程？",
+      "killConfirm": "确认终止 PID {{pid}}？当前对话可能丢失。",
+      "restartConfirmTitle": "重启守护进程？",
+      "restartConfirm": "确认重启守护进程？当前正在进行的对话会被中断。",
+      "killAllConfirmTitle": "清理所有孤立进程？",
+      "killAllConfirm": "确认终止全部 {{count}} 个孤立进程？",
+      "killSuccess": "进程已终止",
+      "killAllSuccess": "已清理 {{count}} 个孤立进程",
+      "restartSuccess": "守护进程已关闭，下一条消息会自动启动新实例",
+      "killFailed": "终止失败：{{error}}",
+      "activeRequests": "{{count}} 个进行中"
+    },
     "link": "链接"
   },
   "markdown": {
@@ -1463,7 +1524,7 @@
       },
       "opus46": {
         "label": "Opus 4.7",
-        "description": "Opus 4.7 · 最新最强大的模型"
+        "description": "Opus 4.7 · 上一代旗舰模型"
       },
       "opus46_1m": {
         "label": "Opus 4.6",
@@ -1472,6 +1533,10 @@
       "haiku45": {
         "label": "Haiku 4.5",
         "description": "Haiku 速度最快，适合快速答复"
+      },
+      "opus48": {
+        "label": "Opus 4.8",
+        "description": "Opus 4.8 · 最新最强大的模型"
       }
     },
     "codex": {
@@ -1753,6 +1818,22 @@
         "downgrade": {
           "title": "方案二：版本回退",
           "step0": "在「依赖管理」中将 SDK 版本切换到 v0.2.112 或更早版本，切换后需要重启 IDEA。"
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — 子进程启动失败",
+      "intro": "该错误通常由 Node.js 版本不兼容或 SDK 安装不完整引起，按以下两个方向排查通常可解决：",
+      "reason": "EBUSY 是 Node.js 启动子进程时遇到资源繁忙的系统错误。常见原因：Node.js 24 兼容性问题、SDK 版本过旧、或使用淘宝源安装时同步不完整。",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "方案一：检查 Node.js 版本",
+          "step0": "在终端运行下面的命令查看版本号。建议使用 Node 22 或当前最新 LTS 版本 — 用户反馈 Node 24 报错较多，请优先使用 20 或 22："
+        },
+        "reinstallLatestSdk": {
+          "title": "方案二：用 npm 官方源重装最新版 SDK",
+          "step0": "1. 切换到 npm 官方源（淘宝源可能未同步最新版本，请勿使用淘宝源安装）：",
+          "step1": "2. 打开「依赖管理」重装最新版 SDK："
         }
       }
     }

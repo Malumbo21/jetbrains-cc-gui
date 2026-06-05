@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -312,12 +313,14 @@ public class WorkspaceContextCollector {
 
     /**
      * Get module type name.
-     * Returns the module type identifier if set (non-standard module types like Maven, Gradle).
-     * Standard JAVA_MODULE types typically do not have this option set.
+     * Resolves the module's type through the platform's public ModuleType API and returns
+     * its identifier (e.g. JAVA_MODULE, WEB_MODULE), or null when unavailable.
      */
     private static @Nullable String getModuleTypeName(@NotNull Module module) {
-        String moduleType = module.getOptionValue("moduleType");
-        return moduleType != null && !moduleType.isEmpty() ? moduleType : null;
+        // Module#getModuleTypeName() is @ApiStatus.Internal; ModuleType.get(Module) is the
+        // public replacement that resolves the module type through the platform.
+        String id = ModuleType.get(module).getId();
+        return id != null && !id.isEmpty() ? id : null;
     }
 
     /**

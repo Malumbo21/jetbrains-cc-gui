@@ -74,6 +74,16 @@ public class ClaudeMessageHandler implements MessageCallback {
     }
 
     /**
+     * Reset segment activity flags and replay deduplicator.
+     * Called at stream start, stream end, block reset, and error/completion boundaries.
+     */
+    private void resetSegmentState() {
+        textSegmentActive = false;
+        thinkingSegmentActive = false;
+        replayDedup.reset();
+    }
+
+    /**
      * Handle a received message by dispatching to the appropriate handler based on type.
      */
     @Override
@@ -107,6 +117,9 @@ public class ClaudeMessageHandler implements MessageCallback {
                 break;
             case "stream_end":
                 handleStreamEnd();
+                break;
+            case "block_reset":
+                handleBlockReset();
                 break;
             case "session_id":
                 handleSessionId(content);
@@ -151,9 +164,7 @@ public class ClaudeMessageHandler implements MessageCallback {
         streamEndedThisTurn = false;
         errorReportedThisTurn = true;
         lastReportedError = error;
-        textSegmentActive = false;
-        thinkingSegmentActive = false;
-        replayDedup.reset();
+        resetSegmentState();
 
         // Reset thinking state if still active — same as onComplete() and handleStreamEnd()
         if (isThinking) {
@@ -205,9 +216,7 @@ public class ClaudeMessageHandler implements MessageCallback {
         // This mirrors the same pattern used in onError() above.
         boolean wasStreaming = isStreaming;
         isStreaming = false;
-        textSegmentActive = false;
-        thinkingSegmentActive = false;
-        replayDedup.reset();
+        resetSegmentState();
 
         // Reset thinking state if still active
         if (isThinking) {
@@ -662,9 +671,7 @@ public class ClaudeMessageHandler implements MessageCallback {
         streamEndedThisTurn = false;
         errorReportedThisTurn = false;
         lastReportedError = null;
-        textSegmentActive = false;
-        thinkingSegmentActive = false;
-        replayDedup.reset();
+        resetSegmentState();
         callbackHandler.notifyStreamStart();
     }
 
@@ -675,9 +682,7 @@ public class ClaudeMessageHandler implements MessageCallback {
         LOG.debug("Stream ended");
         isStreaming = false;  // Mark streaming as inactive
         streamEndedThisTurn = true;
-        textSegmentActive = false;
-        thinkingSegmentActive = false;
-        replayDedup.reset();
+        resetSegmentState();
 
         // Reset thinking state — stream end is the definitive boundary for a turn.
         // If thinking was active when the stream ended (e.g., extended thinking without
@@ -700,6 +705,19 @@ public class ClaudeMessageHandler implements MessageCallback {
         state.setLoading(false);
         state.updateLastModifiedTime();
         callbackHandler.notifyStateChange(state.isBusy(), state.isLoading(), state.getError());
+    }
+
+    /**
+     * Handle block reset signal received during streaming.
+     * This indicates a new assistant message has started within the stream
+     * (e.g., after a tool_use loop iteration). Reset segment state and notify
+     * frontend to clear streaming content refs, preventing cross-turn content merging.
+     */
+    private void handleBlockReset() {
+        LOG.debug("Block reset received - clearing segment state and notifying frontend");
+        resetSegmentState();
+        // Notify frontend to clear streaming refs (streamingThinkingRef, streamingContentRef)
+        callbackHandler.notifyBlockReset();
     }
 
     /**

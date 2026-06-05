@@ -4,6 +4,7 @@ import type { SettingsTab } from '../components/settings/SettingsSidebar';
 import type { ContextInfo, ViewMode } from '../hooks';
 import { APP_VERSION } from '../version/version';
 import { DEFAULT_STATUS } from './MessagesContext';
+import { forceWebviewRepaint } from '../utils/forceWebviewRepaint';
 
 const LAST_SEEN_VERSION_KEY = 'lastSeenChangelogVersion';
 
@@ -34,6 +35,10 @@ export interface UIStateContextValue {
   // Chat input draft (kept here for cross-view persistence)
   draftInput: string;
   setDraftInput: React.Dispatch<React.SetStateAction<string>>;
+
+  // In-conversation search panel (Cmd/Ctrl+F)
+  searchOpen: boolean;
+  setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UIStateContext = createContext<UIStateContextValue | null>(null);
@@ -55,6 +60,7 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
   });
   const [contextInfo, setContextInfo] = useState<ContextInfo | null>(null);
   const [draftInput, setDraftInput] = useState<string>('');
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
 
   const addToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
     if (message === DEFAULT_STATUS || !message) return;
@@ -71,6 +77,8 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
   const closeChangelogDialog = useCallback(() => {
     localStorage.setItem(LAST_SEEN_VERSION_KEY, APP_VERSION);
     setShowChangelogDialog(false);
+    // The fixed-position fullscreen overlay can leave ghosting after unmount on macOS JCEF.
+    forceWebviewRepaint('changelog-dialog-close');
   }, []);
 
   const openChangelogDialog = useCallback(() => { setShowChangelogDialog(true); }, []);
@@ -84,6 +92,7 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
       showChangelogDialog, closeChangelogDialog, openChangelogDialog,
       contextInfo, setContextInfo,
       draftInput, setDraftInput,
+      searchOpen, setSearchOpen,
     }),
     [
       currentView, settingsInitialTab,
@@ -91,6 +100,7 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
       addModelDialogOpen,
       showChangelogDialog, closeChangelogDialog, openChangelogDialog,
       contextInfo, draftInput,
+      searchOpen,
     ],
   );
 
