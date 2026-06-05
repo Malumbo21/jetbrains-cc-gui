@@ -1016,6 +1016,19 @@
       "empty": "No providers available",
       "switched": "Switched to {{provider}}"
     },
+    "codexQuota": {
+      "title": "Codex quota",
+      "loading": "Loading quota...",
+      "unavailable": "Quota unavailable",
+      "lastUpdated": "Updated {{value}}",
+      "fiveHour": "5h usage",
+      "weekly": "Weekly usage",
+      "windowRemainingPercent": "{{percent}}% remaining",
+      "windowRemainingPercentWithReset": "{{percent}}% remaining · Resets {{value}}",
+      "windowUsedOnly": "{{used}} used",
+      "windowDetail": "{{used}} used · {{remaining}} remaining / {{limit}}",
+      "windowUnavailable": "Unavailable"
+    },
     "nodeProcesses": {
       "title": "Node Process Manager",
       "badge": "{{total}} processes",
@@ -1055,19 +1068,6 @@
       "activeRequests": "{{count}} in-flight"
     },
     "link": "Link"
-  },
-  "codexQuota": {
-    "title": "Codex quota",
-    "loading": "Loading quota...",
-    "unavailable": "Quota unavailable",
-    "lastUpdated": "Updated {{value}}",
-    "fiveHour": "5h usage",
-    "weekly": "Weekly usage",
-    "windowRemainingPercent": "{{percent}}% remaining",
-    "windowRemainingPercentWithReset": "{{percent}}% remaining · Resets {{value}}",
-    "windowUsedOnly": "{{used}} used",
-    "windowDetail": "{{used}} used · {{remaining}} remaining / {{limit}}",
-    "windowUnavailable": "Unavailable"
   },
   "markdown": {
     "copyCode": "Copy code",
