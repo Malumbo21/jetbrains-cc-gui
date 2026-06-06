@@ -163,8 +163,6 @@ class ClaudeMcpQueryService {
                 }
             }
 
-            log.warn("[McpTools] Marker not found for " + serverId + ". Bridge output: " +
-                    result.fullOutput.substring(0, Math.min(1000, result.fullOutput.length())));
             JsonObject errorResult = new JsonObject();
             errorResult.addProperty("serverId", serverId);
             errorResult.addProperty("error", "Failed to get tools list");
