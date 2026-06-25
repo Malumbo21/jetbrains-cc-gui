@@ -83,7 +83,7 @@
     "sdkStatusLoading": "Checking SDK status...",
     "openSourceBanner": "このプロジェクトは100%オープンソースかつ無料を保証します（海賊版プロジェクトにご注意ください）",
     "openSourceBannerStar": "Star",
-    "openSourceBannerStarToast": "リポジトリのURLをクリップボードにコピーしました。ブラウザに貼り付けてスターをお願いします ⭐",
+    "openSourceBannerStarToast": "リポジトリのURLをクリップボードにコピーしました。ブラウザに貼り付けてアクセスできます ⭐",
     "openSourceBannerStarAria": "リポジトリのURLをコピーして GitHub でスター",
     "goInstallSdk": "インストールへ",
     "commandNotImplemented": "`{{command}}` 機能はまだ実装されていません。",

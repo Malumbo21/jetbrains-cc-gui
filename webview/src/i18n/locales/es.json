@@ -83,7 +83,7 @@
     "sdkStatusLoading": "Checking SDK status...",
     "openSourceBanner": "Este proyecto garantiza ser 100% de código abierto y gratuito (cuidado con los proyectos pirateados)",
     "openSourceBannerStar": "Star",
-    "openSourceBannerStarToast": "Enlace copiado al portapapeles — pégalo en el navegador para dar una estrella ⭐",
+    "openSourceBannerStarToast": "Enlace copiado al portapapeles — pégalo en el navegador para acceder ⭐",
     "openSourceBannerStarAria": "Copiar enlace y dar una estrella en GitHub",
     "goInstallSdk": "Ir a instalar",
     "commandNotImplemented": "La función `{{command}}` aún no está implementada.",

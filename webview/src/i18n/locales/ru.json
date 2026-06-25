@@ -83,7 +83,7 @@
     "sdkStatusLoading": "Проверка статуса SDK...",
     "openSourceBanner": "Этот проект гарантированно 100% с открытым исходным кодом и бесплатный (остерегайтесь пиратских проектов)",
     "openSourceBannerStar": "Star",
-    "openSourceBannerStarToast": "Ссылка скопирована в буфер обмена — вставьте её в браузере и поставьте звезду ⭐",
+    "openSourceBannerStarToast": "Ссылка скопирована в буфер обмена — вставьте её в браузере, чтобы открыть ⭐",
     "openSourceBannerStarAria": "Скопировать ссылку и поставить звезду на GitHub",
     "goInstallSdk": "Перейти к установке",
     "commandNotImplemented": "Функция `{{command}}` ещё не реализована.",

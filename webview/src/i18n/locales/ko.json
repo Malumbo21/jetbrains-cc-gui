@@ -83,7 +83,7 @@
     "sdkStatusLoading": "SDK 상태 확인 중...",
     "openSourceBanner": "이 프로젝트는 100% 오픈소스이며 무료입니다 (유사품에 주의하세요)",
     "openSourceBannerStar": "Star",
-    "openSourceBannerStarToast": "저장소 주소를 클립보드에 복사했습니다. 브라우저에 붙여넣어 Star를 눌러주세요 ⭐",
+    "openSourceBannerStarToast": "저장소 주소를 클립보드에 복사했습니다. 브라우저에 붙여넣어 방문하세요 ⭐",
     "openSourceBannerStarAria": "저장소 주소 복사 후 GitHub에서 Star",
     "goInstallSdk": "설치하러 가기",
     "commandNotImplemented": "`{{command}}` 기능은 아직 구현되지 않았습니다.",

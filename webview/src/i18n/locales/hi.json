@@ -83,7 +83,7 @@
     "sdkStatusLoading": "Checking SDK status...",
     "openSourceBanner": "यह प्रोजेक्ट 100% ओपन सोर्स और मुफ़्त है (नकली प्रोजेक्ट से सावधान रहें)",
     "openSourceBannerStar": "Star",
-    "openSourceBannerStarToast": "रिपॉजिटरी लिंक क्लिपबोर्ड पर कॉपी हो गया — ब्राउज़र में पेस्ट करके स्टार करें ⭐",
+    "openSourceBannerStarToast": "रिपॉजिटरी लिंक क्लिपबोर्ड पर कॉपी हो गया — ब्राउज़र में पेस्ट करके खोलें ⭐",
     "openSourceBannerStarAria": "रिपॉजिटरी लिंक कॉपी करें और GitHub पर स्टार करें",
     "goInstallSdk": "इंस्टॉल करने जाएं",
     "commandNotImplemented": "`{{command}}` सुविधा अभी तक लागू नहीं की गई है।",

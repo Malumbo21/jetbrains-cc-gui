@@ -83,7 +83,7 @@
     "sdkStatusLoading": "Checking SDK status...",
     "openSourceBanner": "本專案保證100%開源和免費（謹防盜版項目）",
     "openSourceBannerStar": "點個 Star",
-    "openSourceBannerStarToast": "已複製倉庫地址到剪貼簿，歡迎複製到瀏覽器點 Star ⭐",
+    "openSourceBannerStarToast": "已複製倉庫地址到剪貼簿，複製到瀏覽器即可訪問 ⭐",
     "openSourceBannerStarAria": "複製倉庫地址並前往 GitHub 點 Star",
     "goInstallSdk": "前往安裝",
     "commandNotImplemented": "`{{command}}` 功能尚未實現。",
