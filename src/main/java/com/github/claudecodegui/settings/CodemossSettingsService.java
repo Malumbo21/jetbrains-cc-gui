@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1866,37 +1865,6 @@ public class CodemossSettingsService {
     // ==================== User Model Pricing Management ====================
 
     /**
-     * Read user-configured model pricing for a provider family.
-     *
-     * <p>Stored under the {@code customModelPricing.{provider}} node in config.json.
-     * Entries can come from plugin-level custom models or pricing-only Claude mapped models.
-     *
-     * @param provider {@code "claude"} or {@code "codex"}
-     * @return map of model ID → pricing; empty map if none configured
-     */
-    public Map<String, ModelPricing> getCustomModelPricing(String provider) throws IOException {
-        JsonObject config = readConfig();
-        if (!config.has("customModelPricing") || !config.get("customModelPricing").isJsonObject()) {
-            return Map.of();
-        }
-        JsonObject root = config.getAsJsonObject("customModelPricing");
-        if (!root.has(provider) || !root.get(provider).isJsonObject()) {
-            return Map.of();
-        }
-
-        JsonObject providerNode = root.getAsJsonObject(provider);
-        Map<String, ModelPricing> result = new HashMap<>();
-        for (String modelId : providerNode.keySet()) {
-            if (!providerNode.get(modelId).isJsonObject()) {
-                continue;
-            }
-            JsonObject pricingNode = providerNode.getAsJsonObject(modelId);
-            result.put(modelId, parseModelPricing(pricingNode));
-        }
-        return result;
-    }
-
-    /**
      * Persist user-configured model pricing for a provider family, replacing the whole map.
      *
      * @param provider {@code "claude"} or {@code "codex"}
@@ -1928,15 +1896,6 @@ public class CodemossSettingsService {
                 + ": " + (pricing == null ? 0 : pricing.size()) + " models");
     }
 
-    private ModelPricing parseModelPricing(JsonObject node) {
-        return new ModelPricing(
-                readNullableDouble(node, "inputCostPer1M"),
-                readNullableDouble(node, "outputCostPer1M"),
-                readNullableDouble(node, "cacheWriteCostPer1M"),
-                readNullableDouble(node, "cacheReadCostPer1M")
-        );
-    }
-
     private JsonObject serializeModelPricing(ModelPricing pricing) {
         JsonObject node = new JsonObject();
         if (isValidPrice(pricing.inputCostPer1M())) {
@@ -1952,19 +1911,6 @@ public class CodemossSettingsService {
             node.addProperty("cacheReadCostPer1M", pricing.cacheReadCostPer1M());
         }
         return node;
-    }
-
-    private Double readNullableDouble(JsonObject node, String key) {
-        if (node == null || !node.has(key) || node.get(key).isJsonNull()) {
-            return null;
-        }
-        try {
-            double value = node.get(key).getAsDouble();
-            return isValidPrice(value) ? value : null;
-        } catch (Exception e) {
-            LOG.warn("[CodemossSettings] Failed to parse pricing field " + key + ": " + e.getMessage());
-            return null;
-        }
     }
 
     private static boolean isValidPrice(Double value) {

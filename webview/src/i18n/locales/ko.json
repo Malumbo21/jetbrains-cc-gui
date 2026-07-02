@@ -326,13 +326,13 @@
         "cacheWriteShort": "캐시 쓰기",
         "cacheReadShort": "캐시 읽기",
         "invalidValue": "가격은 0 이상의 숫자여야 합니다",
-        "defaultPricing": "Using default pricing"
+        "defaultPricing": "기본 요금 사용 중"
       },
-      "configuredSectionTitle": "Configured Claude models",
-      "configuredSectionDesc": "Models from the active Claude provider/settings.json are already in the selector. Only pricing can be changed here.",
-      "configuredEditHint": "This model is managed by the active Claude provider/settings.json. Only pricing can be changed here.",
-      "customSectionTitle": "Custom models",
-      "editPricing": "Edit pricing"
+      "configuredSectionTitle": "구성된 Claude 모델",
+      "configuredSectionDesc": "현재 Claude 제공자 또는 settings.json의 모델은 이미 모델 선택기에 표시됩니다. 여기서는 가격만 변경할 수 있습니다.",
+      "configuredEditHint": "이 모델은 현재 Claude 제공자 또는 settings.json에서 관리됩니다. 여기서는 가격만 변경할 수 있습니다.",
+      "customSectionTitle": "사용자 지정 모델",
+      "editPricing": "가격 편집"
     },
     "dependencies": "SDK 의존성",
     "dependenciesDesc": "AI SDK 의존성 설치 및 업데이트 관리",

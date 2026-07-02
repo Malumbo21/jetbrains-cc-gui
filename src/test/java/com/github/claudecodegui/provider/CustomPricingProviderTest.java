@@ -13,12 +13,29 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class CustomPricingProviderTest {
 
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
+
+    @Test
+    public void setInstanceForTestsOverridesSingletonAndNullRestoresDefault() throws IOException {
+        CustomPricingProvider injected = CustomPricingProvider.createForTests(
+                temp.newFolder().toPath().resolve("config.json"));
+        try {
+            CustomPricingProvider.setInstanceForTests(injected);
+            assertSame(injected, CustomPricingProvider.getInstance());
+            assertTrue(CustomPricingProvider.getInstance().getPricing("claude", "any-model").isEmpty());
+        } finally {
+            CustomPricingProvider.setInstanceForTests(null);
+        }
+        // After reset the lazily-created default instance takes over again.
+        assertNotSame(injected, CustomPricingProvider.getInstance());
+    }
 
     @Test
     public void shouldMatchRoutePrefixedPricingWhenHistoryStoresRoutedModel() throws IOException {

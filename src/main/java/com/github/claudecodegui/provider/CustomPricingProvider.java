@@ -69,6 +69,30 @@ public final class CustomPricingProvider {
     }
 
     /**
+     * Replace the process-wide singleton so tests that exercise the usage aggregators do not
+     * read the developer's real {@code ~/.codemoss/config.json}. Pass {@code null} to restore
+     * the default lazily-created instance.
+     */
+    @org.jetbrains.annotations.TestOnly
+    public static void setInstanceForTests(CustomPricingProvider testInstance) {
+        instance = testInstance;
+    }
+
+    /**
+     * Build an isolated provider that reads pricing from the given config file path, for tests
+     * outside this package that cannot reach the package-private constructor.
+     */
+    @org.jetbrains.annotations.TestOnly
+    public static CustomPricingProvider createForTests(Path configFilePath) {
+        return new CustomPricingProvider(new ConfigPathManager() {
+            @Override
+            public Path getConfigFilePath() {
+                return configFilePath;
+            }
+        });
+    }
+
+    /**
      * Look up custom pricing for a model under a given provider family.
      *
      * @param provider "claude" or "codex"

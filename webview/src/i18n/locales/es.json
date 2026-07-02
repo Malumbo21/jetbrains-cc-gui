@@ -304,13 +304,13 @@
         "cacheWriteShort": "Escritura de caché",
         "cacheReadShort": "Lectura de caché",
         "invalidValue": "El precio debe ser un número no negativo",
-        "defaultPricing": "Using default pricing"
+        "defaultPricing": "Usando el precio predeterminado"
       },
-      "configuredSectionTitle": "Configured Claude models",
-      "configuredSectionDesc": "Models from the active Claude provider/settings.json are already in the selector. Only pricing can be changed here.",
-      "configuredEditHint": "This model is managed by the active Claude provider/settings.json. Only pricing can be changed here.",
-      "customSectionTitle": "Custom models",
-      "editPricing": "Edit pricing"
+      "configuredSectionTitle": "Modelos de Claude configurados",
+      "configuredSectionDesc": "Los modelos del proveedor de Claude activo o settings.json ya aparecen en el selector. Aquí solo se puede modificar el precio.",
+      "configuredEditHint": "Este modelo está gestionado por el proveedor de Claude activo o settings.json. Aquí solo se puede modificar el precio.",
+      "customSectionTitle": "Modelos personalizados",
+      "editPricing": "Editar precio"
     },
     "dependencies": "Dependencias SDK",
     "dependenciesDesc": "Gestionar instalaciones y actualizaciones de dependencias AI SDK",

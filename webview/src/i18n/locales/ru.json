@@ -304,13 +304,13 @@
         "cacheWriteShort": "Запись кэша",
         "cacheReadShort": "Чтение кэша",
         "invalidValue": "Стоимость должна быть неотрицательным числом",
-        "defaultPricing": "Using default pricing"
+        "defaultPricing": "Используется цена по умолчанию"
       },
-      "configuredSectionTitle": "Configured Claude models",
-      "configuredSectionDesc": "Models from the active Claude provider/settings.json are already in the selector. Only pricing can be changed here.",
-      "configuredEditHint": "This model is managed by the active Claude provider/settings.json. Only pricing can be changed here.",
-      "customSectionTitle": "Custom models",
-      "editPricing": "Edit pricing"
+      "configuredSectionTitle": "Настроенные модели Claude",
+      "configuredSectionDesc": "Модели активного провайдера Claude или settings.json уже отображаются в списке выбора. Здесь можно изменить только стоимость.",
+      "configuredEditHint": "Эта модель управляется активным провайдером Claude или settings.json. Здесь можно изменить только стоимость.",
+      "customSectionTitle": "Пользовательские модели",
+      "editPricing": "Изменить стоимость"
     },
     "dependencies": "Зависимости SDK",
     "dependenciesDesc": "Управление установкой и обновлением зависимостей AI SDK",

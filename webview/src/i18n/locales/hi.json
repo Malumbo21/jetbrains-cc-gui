@@ -304,13 +304,13 @@
         "cacheWriteShort": "कैश लेखन",
         "cacheReadShort": "कैश पठन",
         "invalidValue": "मूल्य एक गैर-ऋणात्मक संख्या होना चाहिए",
-        "defaultPricing": "Using default pricing"
+        "defaultPricing": "डिफ़ॉल्ट मूल्य उपयोग में"
       },
-      "configuredSectionTitle": "Configured Claude models",
-      "configuredSectionDesc": "Models from the active Claude provider/settings.json are already in the selector. Only pricing can be changed here.",
-      "configuredEditHint": "This model is managed by the active Claude provider/settings.json. Only pricing can be changed here.",
-      "customSectionTitle": "Custom models",
-      "editPricing": "Edit pricing"
+      "configuredSectionTitle": "कॉन्फ़िगर किए गए Claude मॉडल",
+      "configuredSectionDesc": "सक्रिय Claude प्रदाता या settings.json के मॉडल पहले से ही चयनकर्ता में दिखते हैं। यहाँ केवल मूल्य बदला जा सकता है।",
+      "configuredEditHint": "यह मॉडल सक्रिय Claude प्रदाता या settings.json द्वारा प्रबंधित है। यहाँ केवल मूल्य बदला जा सकता है।",
+      "customSectionTitle": "कस्टम मॉडल",
+      "editPricing": "मूल्य संपादित करें"
     },
     "dependencies": "SDK निर्भरताएं",
     "dependenciesDesc": "AI SDK निर्भरताओं की इंस्टॉलेशन और अपडेट प्रबंधित करें",

@@ -304,13 +304,13 @@
         "cacheWriteShort": "キャッシュ書き込み",
         "cacheReadShort": "キャッシュ読み取り",
         "invalidValue": "料金は0以上の数値で入力してください",
-        "defaultPricing": "Using default pricing"
+        "defaultPricing": "既定料金を使用中"
       },
-      "configuredSectionTitle": "Configured Claude models",
-      "configuredSectionDesc": "Models from the active Claude provider/settings.json are already in the selector. Only pricing can be changed here.",
-      "configuredEditHint": "This model is managed by the active Claude provider/settings.json. Only pricing can be changed here.",
-      "customSectionTitle": "Custom models",
-      "editPricing": "Edit pricing"
+      "configuredSectionTitle": "設定済みの Claude モデル",
+      "configuredSectionDesc": "現在の Claude プロバイダーまたは settings.json のモデルは既にモデル選択リストに表示されています。ここでは料金のみ変更できます。",
+      "configuredEditHint": "このモデルは現在の Claude プロバイダーまたは settings.json で管理されています。ここでは料金のみ変更できます。",
+      "customSectionTitle": "カスタムモデル",
+      "editPricing": "料金を編集"
     },
     "dependencies": "SDK依存関係",
     "dependenciesDesc": "AI SDK依存関係のインストールと更新を管理",
