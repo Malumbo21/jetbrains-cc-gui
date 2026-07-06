@@ -632,6 +632,30 @@ export async function setPermissionModePersistent(params = {}) {
     return;
   }
 
+  // Entering or leaving Auto (bypassPermissions) cannot be applied live:
+  // allowDangerouslySkipPermissions is a process-launch argv flag frozen at
+  // spawn, and setPermissionMode() (a control request) can neither add nor
+  // remove it. Calling setPermissionMode here would log "applied" while the
+  // subprocess keeps prompting (or keeps skipping, when leaving Auto). So for a
+  // bypass-bit change, DON'T call setPermissionMode — invalidate the runtime
+  // signature so the next send_message rebuilds the runtime with the correct
+  // launch flag (mirrors buildRuntimeSignature's bypassPermissions bit). Update
+  // local state so the intent is recorded; the rebuild spawns fresh regardless.
+  const bypassBitChanged =
+    (targetPermissionMode === 'bypassPermissions')
+      !== (runtime.currentPermissionMode === 'bypassPermissions');
+  if (bypassBitChanged) {
+    runtime.runtimeSignature = '__rebuild-pending-bypass-change__';
+    runtime.currentPermissionMode = targetPermissionMode;
+    if (runtime.permissionModeState) {
+      runtime.permissionModeState.value = targetPermissionMode;
+    }
+    log(`setPermissionModePersistent: bypass bit changed to ${targetPermissionMode};`
+      + ` runtime marked for rebuild on next send sessionId=${sessionId || '(none)'}`
+      + ` epoch=${epoch || '(none)'}`);
+    return;
+  }
+
   // Push to the SDK first. Only update local state on success — otherwise the
   // PreToolUse hook would read the new mode while the SDK still enforces the
   // old one, diverging until the next turn's applyDynamicControls resyncs.
