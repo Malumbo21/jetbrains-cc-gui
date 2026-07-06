@@ -1341,9 +1341,9 @@
         "label": "Sonnet 4.6",
         "description": "Sonnet 4.6 · Modelo recomendado por defecto"
       },
-      "opus46": {
-        "label": "Opus 4.7",
-        "description": "Opus 4.7 · Modelo insignia anterior"
+      "sonnet5": {
+        "label": "Sonnet 5",
+        "description": "Sonnet 5 · Modelo mejorado de Sonnet 4.6"
       },
       "opus46_1m": {
         "label": "Opus 4.6",

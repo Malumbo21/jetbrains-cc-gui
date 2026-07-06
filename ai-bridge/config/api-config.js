@@ -231,9 +231,12 @@ export function buildWebviewControlledSettingsOverride(modelId) {
  * Reads settings via loadClaudeSettings() (same source as setupApiKey) so the
  * auth-decision and the provider-management-decision always see the same env.
  *
- * @returns {boolean} true unless a cloud provider switch is active in settings.
+ * @returns {boolean} true unless CLI login or a cloud provider switch is active.
  */
 function shouldHostManageProvider() {
+  if (getClaudeRuntimeState().access === 'cli_login') {
+    return false;
+  }
   const settings = loadClaudeSettings();
   return !CLOUD_PROVIDER_FLAGS.some((flag) => isEnvFlagEnabled(settings?.env?.[flag]));
 }

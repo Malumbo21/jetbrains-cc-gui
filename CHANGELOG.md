@@ -1,3 +1,19 @@
+##### **2026年7月6日（v0.4.6-fix1）**
+
+English:
+
+🐛 Fixes
+- Fix Claude CLI login being treated as a host-managed provider: when `access` is `cli_login`, the bridge now leaves `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` unset, avoiding the host-managed credential path for users already authenticated through the Claude CLI (by @zkpaiminmin)
+- Fix Claude model metadata after the lineup update: replace the retired `claude-opus-4-7` built-in option with `claude-opus-4-8`, and add `claude-sonnet-5` with 200K / 1M context handling, max reasoning support, usage pricing, model mapping, and localized labels across all supported languages (by @zkpaiminmin)
+
+中文：
+
+🐛 修复
+- 修复 Claude CLI 登录被误判为 host-managed provider：当认证状态为 `cli_login` 时，bridge 不再设置 `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST`，避免已通过 Claude CLI 登录的用户走错 host-managed 凭证路径（by @zkpaiminmin）
+- 修复 Claude 模型清单与元数据滞后：内置模型移除已下线的 `claude-opus-4-7`，切换到 `claude-opus-4-8`，并新增 `claude-sonnet-5` 的 200K / 1M 上下文、max reasoning、用量计价、模型映射和全语言本地化标签（by @zkpaiminmin）
+
+---
+
 ##### **2026年6月28日（v0.4.6）**
 
 English:

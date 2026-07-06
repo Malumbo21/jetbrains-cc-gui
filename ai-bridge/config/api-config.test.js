@@ -296,6 +296,18 @@ test('buildCliEnv leaves CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST unset for cloud pr
   }
 });
 
+test('buildCliEnv leaves CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST unset for CLI login', () => {
+  const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-gui-api-config-'));
+  writeCodemossClaudeConfig(tempHome, '__cli_login__');
+  writeClaudeSettingsEnv(tempHome, {});
+
+  const env = runBuildCliEnv(tempHome);
+
+  assert.equal(env.HOST_MANAGED, undefined);
+  assert.equal(env.ENTRYPOINT, 'cli');
+  assert.equal(env.USER_TYPE, 'external');
+});
+
 test('setupApiKey does not fall back to Claude CLI credentials on disk', () => {
   const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-gui-api-config-'));
   const claudeDir = path.join(tempHome, '.claude');

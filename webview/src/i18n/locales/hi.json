@@ -1340,9 +1340,9 @@
         "label": "Sonnet 4.6",
         "description": "Sonnet 4.6 · डिफ़ॉल्ट अनुशंसित मॉडल"
       },
-      "opus46": {
-        "label": "Opus 4.7",
-        "description": "Opus 4.7 · पिछला फ्लैगशिप मॉडल"
+      "sonnet5": {
+        "label": "Sonnet 5",
+        "description": "Sonnet 5 · Sonnet 4.6 का अपग्रेड मॉडल"
       },
       "opus46_1m": {
         "label": "Opus 4.6",

@@ -42,10 +42,10 @@ const DEFAULT_MODEL_MAP: Record<string, ModelInfo> = AVAILABLE_MODELS.reduce(
 );
 
 const MODEL_LABEL_KEYS: Record<string, string> = {
+  'claude-sonnet-5': 'models.claude.sonnet5.label',
   'claude-sonnet-4-6': 'models.claude.sonnet46.label',
   'claude-fable-5': 'models.claude.fable5.label',
   'claude-opus-4-8': 'models.claude.opus48.label',
-  'claude-opus-4-7': 'models.claude.opus46.label',
   'claude-opus-4-6': 'models.claude.opus46_1m.label',
   'claude-opus-4-6[1m]': 'models.claude.opus46_1m.label',
   'claude-haiku-4-5': 'models.claude.haiku45.label',
@@ -61,10 +61,10 @@ const MODEL_LABEL_KEYS: Record<string, string> = {
 };
 
 const MODEL_DESCRIPTION_KEYS: Record<string, string> = {
+  'claude-sonnet-5': 'models.claude.sonnet5.description',
   'claude-sonnet-4-6': 'models.claude.sonnet46.description',
   'claude-fable-5': 'models.claude.fable5.description',
   'claude-opus-4-8': 'models.claude.opus48.description',
-  'claude-opus-4-7': 'models.claude.opus46.description',
   'claude-opus-4-6': 'models.claude.opus46_1m.description',
   'claude-opus-4-6[1m]': 'models.claude.opus46_1m.description',
   'claude-haiku-4-5': 'models.claude.haiku45.description',
@@ -85,9 +85,9 @@ const MODEL_DESCRIPTION_KEYS: Record<string, string> = {
  * Legacy Opus 4.6 IDs share the same opus mapping bucket.
  */
 const MODEL_ID_TO_MAPPING_KEY: Record<string, string> = {
+  'claude-sonnet-5': 'sonnet',
   'claude-sonnet-4-6': 'sonnet',
   'claude-opus-4-8': 'opus',
-  'claude-opus-4-7': 'opus',
   'claude-opus-4-6': 'opus',
   'claude-opus-4-6[1m]': 'opus',
   'claude-haiku-4-5': 'haiku',

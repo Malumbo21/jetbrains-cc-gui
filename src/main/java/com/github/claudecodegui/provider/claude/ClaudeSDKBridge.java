@@ -496,7 +496,7 @@ public class ClaudeSDKBridge extends BaseSDKBridge {
      *
      * @param sessionId The session ID to query context for
      * @param cwd Working directory
-     * @param model The model ID to use for the runtime (e.g., "claude-opus-4-7")
+     * @param model The model ID to use for the runtime (e.g., "claude-opus-4-8")
      * @return CompletableFuture with context usage data as JsonObject
      */
     public CompletableFuture<JsonObject> getContextUsage(String sessionId, String cwd, String model) {

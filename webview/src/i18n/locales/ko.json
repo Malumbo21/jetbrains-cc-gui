@@ -1458,9 +1458,9 @@
         "label": "Sonnet 4.6",
         "description": "Sonnet 4.6 · 기본 모델 사용"
       },
-      "opus46": {
-        "label": "Opus 4.7",
-        "description": "Opus 4.7 · 이전 세대 플래그십 모델"
+      "sonnet5": {
+        "label": "Sonnet 5",
+        "description": "Sonnet 5 · Sonnet 4.6 업그레이드 모델"
       },
       "opus46_1m": {
         "label": "Opus 4.6",

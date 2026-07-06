@@ -34,8 +34,8 @@ interface ReasoningSelectProps {
  * Controls the depth of reasoning for AI models.
  * Visibility and available levels depend on the selected model:
  * - Codex: low/medium/high/xhigh
- * - Claude Opus 4.7: low/medium/high/xhigh/max
- * - Claude Opus 4.6 and Sonnet 4.6: low/medium/high/max
+ * - Claude Opus 4.8: low/medium/high/xhigh/max
+ * - Claude Sonnet 5, Opus 4.6, and Sonnet 4.6: low/medium/high/max
  * - Claude Haiku 4.5 and legacy models: hidden (no adaptive thinking support)
  */
 export const ReasoningSelect = ({ value, onChange, disabled, selectedModel, currentProvider }: ReasoningSelectProps) => {

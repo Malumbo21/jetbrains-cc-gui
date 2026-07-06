@@ -1513,9 +1513,9 @@
         "label": "Sonnet 4.6",
         "description": "Sonnet 4.6 · Usar o modelo padrão"
       },
-      "opus46": {
-        "label": "Opus 4.7",
-        "description": "Opus 4.7 · Modelo principal anterior"
+      "sonnet5": {
+        "label": "Sonnet 5",
+        "description": "Sonnet 5 · Modelo aprimorado do Sonnet 4.6"
       },
       "opus46_1m": {
         "label": "Opus 4.6",

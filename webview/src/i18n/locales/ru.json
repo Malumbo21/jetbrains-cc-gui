@@ -1367,9 +1367,9 @@
         "label": "Sonnet 4.6",
         "description": "Sonnet 4.6 · Модель по умолчанию"
       },
-      "opus46": {
-        "label": "Opus 4.7",
-        "description": "Opus 4.7 · Предыдущая флагманская модель"
+      "sonnet5": {
+        "label": "Sonnet 5",
+        "description": "Sonnet 5 · Обновленная модель Sonnet 4.6"
       },
       "opus46_1m": {
         "label": "Opus 4.6",

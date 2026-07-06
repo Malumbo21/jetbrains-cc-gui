@@ -1346,9 +1346,9 @@
         "label": "Sonnet 4.6",
         "description": "Sonnet 4.6 · 預設推薦模型"
       },
-      "opus46": {
-        "label": "Opus 4.7",
-        "description": "Opus 4.7 · 上一代旗艦模型"
+      "sonnet5": {
+        "label": "Sonnet 5",
+        "description": "Sonnet 5 · Sonnet 4.6 升級模型"
       },
       "opus46_1m": {
         "label": "Opus 4.6",
