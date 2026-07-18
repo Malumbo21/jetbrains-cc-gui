@@ -47,6 +47,22 @@ public class UsageCostCalculatorTest {
     }
 
     @Test
+    public void pricesGpt56FamilyIncludingAlias() {
+        JsonObject usage = new JsonObject();
+        usage.addProperty("input_tokens", 690);
+        usage.addProperty("cache_read_input_tokens", 36310);
+        usage.addProperty("output_tokens", 353);
+
+        // gpt-5.6-sol: input 5.0 / output 30.0 / cacheRead 0.5 per 1M.
+        double solCost = UsageCostCalculator.calculateTurnCostUsd("codex", usage, "gpt-5.6-sol");
+        assertEquals(0.032195, solCost, 0.0000001);
+
+        // Bare "gpt-5.6" is aliased to gpt-5.6-sol, matching CodexUsageAggregator.
+        double aliasCost = UsageCostCalculator.calculateTurnCostUsd("codex", usage, "gpt-5.6");
+        assertEquals(0.032195, aliasCost, 0.0000001);
+    }
+
+    @Test
     public void returnsNullWhenNoBuiltInOrCustomPriceMatches() {
         JsonObject usage = new JsonObject();
         usage.addProperty("input_tokens", 1200);
