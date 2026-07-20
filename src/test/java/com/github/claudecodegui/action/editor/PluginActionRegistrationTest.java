@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -65,14 +66,20 @@ public class PluginActionRegistrationTest {
                 .parse(new File("src/main/resources/META-INF/plugin.xml"));
 
         NodeList dependencies = document.getElementsByTagName("depends");
-        boolean hasJcefDependency = false;
+        boolean hasOptionalJcefDependency = false;
         for (int i = 0; i < dependencies.getLength(); i++) {
-            if ("com.intellij.modules.jcef".equals(dependencies.item(i).getTextContent().trim())) {
-                hasJcefDependency = true;
+            Node dependency = dependencies.item(i);
+            Node optional = dependency.getAttributes().getNamedItem("optional");
+            Node configFile = dependency.getAttributes().getNamedItem("config-file");
+            if ("com.intellij.modules.jcef".equals(dependency.getTextContent().trim())
+                    && optional != null && "true".equals(optional.getNodeValue())
+                    && configFile != null && "jcef-features.xml".equals(configFile.getNodeValue())) {
+                hasOptionalJcefDependency = true;
                 break;
             }
         }
-        Assert.assertTrue("JCEF must be available before loading JBCefBrowser classes", hasJcefDependency);
+        Assert.assertTrue("JCEF must be optional for IDEs without the standalone module",
+                hasOptionalJcefDependency);
 
         ActionRegistration saveAsTemplateAction = getActionRegistration("ClaudeCodeGUI.SaveAsTemplateAction");
         Assert.assertEquals("/icons/cc-gui-icon.svg", saveAsTemplateAction.icon);
